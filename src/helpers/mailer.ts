@@ -40,9 +40,14 @@ export const DemoMail= async({email, emailType}:any) => {
       `, // html body
         };
 
-        const mailResponse = await transport.sendMail(mailOptions)
-        console.log("MAIL SENT");
-        return mailResponse
+        try {
+          const mailResponse = await transport.sendMail(mailOptions)
+          console.log("✅ Email sent");
+          return mailResponse;
+        } catch (error: any) {
+          console.error("❌ Failed to send mail", error);
+          throw new Error(error.message);
+        }
   }
   }
   catch(error:any){
@@ -71,7 +76,8 @@ export const sendMail= async({email, emailType, userId}:any) => {
 
         var transport = nodemailer.createTransport({ 
           host: process.env.SMTP_HOST,
-          port: process.env.SMTP_PORT,
+          port: Number(process.env.SMTP_PORT),
+          secure: false,
           auth: {
             user: process.env.SMTP_USER,
             pass: process.env.SMTP_PASS,
@@ -79,7 +85,7 @@ export const sendMail= async({email, emailType, userId}:any) => {
           });
 
           const mailOptions = {
-            from: 'support@craftvc.io', // sender address
+            from: 'support@unidays.io', // sender address
             to: email, // list of receivers
             subject: emailType === 'VERIFY' ? "Verify your mail" : "Reset your password", // Subject line
             html: emailType === 'VERIFY' ? `<p>Click <a href="${process.env.DOMAIN}/verifyemail?token=${encodedToken}">here</a> to Verify you mail
@@ -87,8 +93,14 @@ export const sendMail= async({email, emailType, userId}:any) => {
             your password or copy the link in your browser ${process.env.DOMAIN}/verifyemail?token=${encodedToken}</p>`, // html body
           };
 
-          const mailResponse = await transport.sendMail(mailOptions)
-          return mailResponse
+          try {
+            const mailResponse = await transport.sendMail(mailOptions)
+            console.log("✅ Email sent");
+            return mailResponse;
+          } catch (error: any) {
+            console.error("❌ Failed to send mail", error);
+            throw new Error(error.message);
+          }
 
     } catch (error:any) {
         throw new Error(error.message)
