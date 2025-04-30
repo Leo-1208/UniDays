@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState, useCallback } from 'react';
 import { useToast } from "@/components/ui/use-toast";
 import { ClimbSpinner } from '@/components/LoadingSpinner';
+import { useRouter } from "next/navigation"
 
 function LogoutComponent() {
     const [token, setToken] = useState("");
@@ -13,8 +14,10 @@ function LogoutComponent() {
     const [loading, setLoading] = useState(true);
     const searchParams = useSearchParams();
     const { toast } = useToast();
-
+    const router = useRouter();
+    
     const logoutUser = useCallback(async () => {
+       
         try {
             setLoading(true);
             setError(false); // Reset error state before making the request
@@ -41,6 +44,10 @@ function LogoutComponent() {
             setTimeout(() => {
                 window.location.reload();
             }, 4000);
+            setTimeout(() => {
+                window.location.reload();
+              }, 1000);
+            router.push('/')
         }
     }, [token, toast]);
 

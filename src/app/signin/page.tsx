@@ -56,7 +56,7 @@ export default function SignupPage() {
       })
       setTimeout(() => {
         window.location.reload();
-      }, 1500);
+      }, 800);
       router.push('/')
     } catch (error: any) {
       console.log("Signin failed", error);
