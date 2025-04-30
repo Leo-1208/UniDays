@@ -6,6 +6,7 @@ import Image from "next/image";
 import Button from '@/components/Button';
 import SearchBox from '@/components/SearchBox';
 import { NAV_LINKS } from "@/constants/index";
+import { useProfile } from '@/components/ProfileContext'
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -13,6 +14,7 @@ export default function Navbar() {
   const [OpenNav2, SetOpenNav2] = useState(false);
   const navbar2Ref = useRef<HTMLDivElement>(null);
   const [avatarUrl, setAvatarUrl] = useState<string>("/user_icon.svg");
+  const { open: openProfile } = useProfile()
 
   // Fetch login state on mount
   useEffect(() => {
@@ -47,9 +49,19 @@ export default function Navbar() {
   return (
     <div className="w-full flex justify-center">
       <nav className="flex items-center justify-between max-container padding-conatiner z-30 py-3 px-5 fixed top-0 w-full bg-white">
-        <Link href="/">
+        <Link href="/" className='hidden lg:flex'>
           <Image src="/logo.svg" alt="logo" width={63} height={63}/>
         </Link>
+
+        <Image
+          src="/menu_icon.svg"
+          alt="menu"
+          width={32}
+          height={32}
+          onClick={Togglemenu}
+          className="inline-block cursor-pointer lg:hidden"
+        />
+        
         <div className="flex gap-12 items-center">
           <ul className="hidden lg:flex gap-12">
             {NAV_LINKS.map((link) => (
@@ -71,15 +83,16 @@ export default function Navbar() {
         {/* ← Here is the change: */}
         <div className="hidden lg:flex gap-2">
           {isLoggedIn ? (
-            <Link href="/profile" className="flexCenter rounded-full p-1 hover:bg-gray-100">
-<Image
-  src={avatarUrl}
-  alt="Profile"
-  width={40}
-  height={30}
-  className="rounded-full object-cover border-2 border-gray-300 hover:scale-110 transition-transform duration-300 ease-in-out shadow-sm"
-/>
-            </Link>
+          <button onClick={openProfile}           // ← this now slides the profile panel in
+          className="relative w-12 h-12 rounded-full border-white overflow-hidden ">
+          <Image
+            src={avatarUrl}
+            alt="Profile"
+            fill
+            className="rounded-full object-cover border-2 border-green-200 hover:scale-110 transition-transform duration-300 ease-in-out shadow-sm"
+          />
+        </button>
+            
           ) : (
             <>
               <Button title="Signup" icon="/signup_icon.svg" variant="btn_gray" link="/signup"/>
@@ -88,14 +101,19 @@ export default function Navbar() {
           )}
         </div>
 
-        <Image
-          src="/menu_icon.svg"
-          alt="menu"
-          width={32}
-          height={32}
-          onClick={Togglemenu}
-          className="inline-block cursor-pointer lg:hidden"
-        />
+        {isLoggedIn ? (<button onClick={openProfile}           // ← this now slides the profile panel in
+          className="relative w-9 h-9 rounded-full border-white overflow-hidden lg:hidden">
+          <Image
+            src={avatarUrl}
+            alt="Profile"
+            fill
+            className="rounded-full object-cover border-2 border-green-200 hover:scale-110 transition-transform duration-300 ease-in-out shadow-sm"
+          />
+        </button>):(
+          <Link href="/" className=' lg:hidden'>
+          <Image src="/logo.svg" alt="logo" width={48} height={48}/>
+        </Link>
+          )}
 
         {/* Mobile menu overlay */}
         <div className={`fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center transition-opacity ${OpenMenu ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
@@ -119,6 +137,7 @@ export default function Navbar() {
               </ul>
             </nav>
             <div className="flex flex-col gap-2 mt-8">
+              
               {!isLoggedIn && (
                 <>
                   <Button title="Signup" icon="/signup_icon.svg" variant="btn_gray" link="/signup"/>

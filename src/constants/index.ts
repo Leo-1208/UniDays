@@ -115,7 +115,7 @@ export const FOOTER_LINKS = [
     name: 'Kanika Sharma',
     email: 'kanikasharma@gkpian.iitkgp.ac.in',
     phone: '+91 95170 67231',
-    avatar: '/kanika_avatar.jpg',   // drop this into your public/ folder
+    avatar: '/female-avataar.jpg',   // drop this into your public/ folder
     verified: true,
   }
 

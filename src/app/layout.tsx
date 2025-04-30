@@ -4,6 +4,8 @@ import "./globals.css";
 import Navbar from "@/Layoutcomponents/Navbar";
 import Footer from "@/Layoutcomponents/Footer";
 import { Toaster } from "@/components/ui/toaster";
+import { ProfileProvider } from "@/components/ProfileContext";
+import ProfileDrawer from "@/components/ProfileDrawer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,13 +24,17 @@ export default function RootLayout({
       <head>
       <link rel="icon" href="/logo.svg" />
       </head>
+
+
       <body className={inter.className}>
+      <ProfileProvider>
         <Navbar />
         <main>{children}</main>
+        <ProfileDrawer />
         <Toaster />
         <Footer />
+      </ProfileProvider>
         </body>
-        
     </html>
   );
 }
